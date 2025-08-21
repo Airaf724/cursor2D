@@ -1,0 +1,87 @@
+"use client";
+
+import React from "react";
+import LoginDialog from "./LoginDIalog"; // 👈 import your dialog
+import { useAppData } from "@/context/AppContext";
+import Image from "next/image";
+import { Button } from "./ui/button";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie";
+
+const Navbar: React.FC = () => {
+  const { user, isAuth, setLoading, setIsAuth, isLoading } = useAppData();
+
+  const handleLogout = () => {
+    setLoading(true);
+    Cookies.remove("token");
+    setIsAuth(false);
+    setLoading(false);
+    toast.success("Logout successful!");
+
+    // 🔄 refresh page after logout
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); // small delay so toast shows
+  };
+
+  const profileImage =
+    user?.picture ||
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIf4R5qPKHPNMyAqV-FjS_OTBB8pfUV29Phg&s";
+
+  return (
+    <nav className="fixed top-0 left-0 w-full z-10 flex items-center justify-between px-6 py-3 lg:px-12 bg-gray-900">
+      {/* Logo */}
+      <div className="flex items-center space-x-2">
+        <span className="text-white font-bold text-xl italic cursor-pointer">
+          Cursor
+        </span>
+        <span className="text-xs text-blue-400 bg-blue-400/20 px-2 py-1 rounded-full">
+          2D
+        </span>
+      </div>
+
+      {/* Links */}
+      <div className="hidden md:flex items-center space-x-8 text-gray-300">
+        <a href="#" className="hover:text-white transition-colors">
+          Community
+        </a>
+        <a href="#" className="hover:text-white transition-colors">
+          Enterprise
+        </a>
+        <a href="#" className="hover:text-white transition-colors">
+          Resources
+        </a>
+        <a href="#" className="hover:text-white transition-colors">
+          Careers
+        </a>
+        <a href="#" className="hover:text-white transition-colors">
+          Pricing
+        </a>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center space-x-4">
+        {!isAuth ? (
+          <LoginDialog />
+        ) : (
+          <Button
+            onClick={handleLogout}
+            className="cursor-pointer" // 👈 makes sure cursor pointer is applied
+          >
+            Logout
+          </Button>
+        )}
+
+        <Image
+          src={profileImage}
+          alt="profile"
+          width={32} // better actual px size than 8
+          height={32}
+          className="w-8 h-8 rounded-full border border-gray-500"
+        />
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
