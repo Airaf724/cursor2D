@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,8 @@ interface LoginResponse {
 }
 
 const LoginDialog: React.FC = () => {
+  const [open, setOpen] = useState(false); // control dialog state
+
   const responseGoogle = async (authResult: any) => {
     try {
       const result = await axios.post<LoginResponse>(`${user_service}/login`, {
@@ -29,14 +31,17 @@ const LoginDialog: React.FC = () => {
 
       Cookies.set("token", result.data.token, {
         expires: 5,
-        // secure: true,
         path: "/",
       });
 
       toast.success("Login successful!");
+      setOpen(false); // close dialog
+      setTimeout(() => window.location.reload(), 300); // reload after closing
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please try again.");
+      setOpen(false); // close dialog on failure too
+      setTimeout(() => window.location.reload(), 300);
     }
   };
 
@@ -45,8 +50,9 @@ const LoginDialog: React.FC = () => {
     onError: responseGoogle,
     flow: "auth-code",
   });
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Login</Button>
       </DialogTrigger>

@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent } from "react";
 import { Paperclip, Sparkles, ArrowUp } from "lucide-react";
 import { useAppData } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const InputBox: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
@@ -12,7 +13,10 @@ const InputBox: React.FC = () => {
   };
 
   const handleRequest = async () => {
-    if (!inputValue.trim() || !user) return;
+    if (!user) {
+      toast.error("Please Login First.");
+    }
+    if (!inputValue.trim()) return;
 
     const prompt = inputValue;
     setInputValue(""); // Clear input immediately
@@ -53,7 +57,7 @@ const InputBox: React.FC = () => {
             </button>
           </div>
           <button
-            disabled={!inputValue.trim()}
+            disabled={!user || !inputValue.trim()}
             onClick={handleRequest}
             className="disabled:opacity-50 disabled:cursor-not-allowed"
           >
