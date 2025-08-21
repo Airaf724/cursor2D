@@ -338,7 +338,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         fetchChats,
       }}
     >
-      <GoogleOAuthProvider clientId="282455064548-svrce42ejkpd0ku0u0k5jig36ooi7af5.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId="147050909153-d07pgacmdke10i6td07gknnim74b75p3.apps.googleusercontent.com">
         {children}
         <Toaster position="top-right" />
       </GoogleOAuthProvider>
