@@ -67,7 +67,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 cursor-pointer">
         {!isAuth ? (
           <LoginDialog />
         ) : (

@@ -41,20 +41,19 @@ export default function Home() {
         <BackgroundEffects />
         <div className="text-center relative z-10">
           <h1 className="text-4xl font-bold text-white mb-4">
-            Welcome to Manim AI
+            Welcome to Cursor2D
           </h1>
           <p className="text-gray-300 text-lg mb-8">
             Please log in to start creating animations
           </p>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8">
-            <p className="text-white">Authentication required to continue</p>
+            <p className="text-white">Authentication is required </p>
           </div>
         </div>
       </div>
     );
   }
 
-  // Chat Interface View
   // Chat Interface View
   if (showChat) {
     return (
