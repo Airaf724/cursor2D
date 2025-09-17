@@ -55,20 +55,24 @@ export default function Home() {
   }
 
   // Chat Interface View
+  // Chat Interface View
   if (showChat) {
     return (
-      <div className="h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-black flex relative overflow-hidden">
+      <div className="h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-black flex relative overflow-hidden pt-12">
+        {/* 👆 added pt-16 so everything starts below navbar */}
         <BackgroundEffects />
 
         {/* Mobile/Desktop Sidebar */}
         <div
           className={`
-          fixed md:relative top-0 left-0 h-full z-30 transform transition-transform duration-300 ease-in-out
+          fixed md:relative top-16 left-0 h-[calc(100%-4rem)] z-30 
+          transform transition-transform duration-300 ease-in-out
           ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           }
         `}
         >
+          {/* 👆 top-16 instead of top-0, height adjusted */}
           <ChatSidebar />
         </div>
 
@@ -84,34 +88,7 @@ export default function Home() {
         <div className="flex-1 flex flex-col min-w-0 relative z-10">
           {/* Header */}
           <div className="bg-white/5 backdrop-blur-sm border-b border-white/10 p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="md:hidden text-white hover:text-blue-400 transition-colors"
-                >
-                  <MessageSquare className="h-6 w-6" />
-                </button>
-                <div>
-                  <h1 className="text-xl font-bold text-white">
-                    {currentChat?.title || "Manim Animation Studio"}
-                  </h1>
-                  <p className="text-gray-400 text-sm">
-                    AI-powered mathematical animations
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setShowChat(false);
-                  setSidebarOpen(false);
-                }}
-                className="text-gray-400 hover:text-white transition-colors"
-                title="Back to home"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
+            ...
           </div>
 
           {/* Chat Interface */}

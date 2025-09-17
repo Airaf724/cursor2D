@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Play,
   Download,
@@ -16,6 +16,17 @@ import { useAppData } from "../context/AppContext";
 const ChatInterface: React.FC = () => {
   const { currentChat } = useAppData();
 
+  // Ref for auto-scrolling
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [currentChat?.messages]);
+
   // Track which message was copied
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -30,12 +41,25 @@ const ChatInterface: React.FC = () => {
     });
   };
 
-  const downloadVideo = (videoUrl: string, messageId: string) => {
-    if (videoUrl) {
+  const downloadVideo = async (videoUrl: string, messageId: string) => {
+    if (!videoUrl) return;
+
+    try {
+      const response = await fetch(videoUrl);
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = videoUrl;
+      a.href = url;
       a.download = `manim_animation_${messageId}.mp4`;
+      document.body.appendChild(a);
       a.click();
+
+      // cleanup
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error downloading video:", err);
     }
   };
 
@@ -72,7 +96,7 @@ const ChatInterface: React.FC = () => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-6">
+    <div className="flex-1 mt-7 overflow-y-auto p-4 space-y-6">
       {currentChat?.messages.map((message, index) => (
         <div key={message._id || index} className="space-y-4">
           {/* User Message */}
@@ -202,6 +226,8 @@ const ChatInterface: React.FC = () => {
           </div>
         </div>
       ))}
+      {/* Auto scroll anchor */}
+      <div ref={scrollRef} />
     </div>
   );
 };
